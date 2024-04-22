@@ -11,7 +11,14 @@ html_source_code = browser.execute_script("return document.body.innerHTML;")
 html_soup = BeautifulSoup(html_source_code, "html.parser")
 
 jobs = html_soup.find_all(class_= "css-5lfssm")
-titles = jobs.find("span", class_= "title")
+# %%
+jobs[0]
+# %%
+for job in jobs:
+
+    title = job.find("span", class_= "title")
+    print(title)
+# %%
 location = jobs.find("div", class_="css-92r8pb")
 company = jobs.find("span", class_="css-1p0sjhy")
 #titles = browser.find_elements(By.CLASS_NAME, "title")
