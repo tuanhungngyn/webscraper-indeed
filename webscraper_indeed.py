@@ -7,14 +7,18 @@ import csv
 
 browser = webdriver.Chrome()
 browser.get("https://de.indeed.com/jobs?q=werkstudent+Informatik&l=Hamburg&from=searchOnHP&vjk=74a581fd64741df8")
+html_source_code = browser.execute_script("return document.body.innerHTML;")
+html_soup = BeautifulSoup(html_source_code, "html.parser")
 
-title_element = browser.find_element(By.XPATH, "/html/body/main/div/div[2]/div/div[5]/div/div[1]/div[5]/div/ul/li[1]/div/div/div/div/div/table[1]/tbody/tr/td[1]/div[1]/h2/a/span")
-##titles = [title.text for title in title_element]
+jobs = html_soup.find_all(class_= "css-5lfssm")
+titles = jobs.find("span", class_= "title")
+location = jobs.find("div", class_="css-92r8pb")
+company = jobs.find("span", class_="css-1p0sjhy")
+#titles = browser.find_elements(By.CLASS_NAME, "title")
 #company_element = browser.find_element(By.XPATH, "")
 #location_element = browser.find_element(By.XPATH, "")
 #tag_element = browser.find_element(By.XPATH, "")
-browser.quit()
-title_element.text
+titles
 # %%
 
 
