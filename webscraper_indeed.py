@@ -40,3 +40,14 @@ titles
 
 
 
+
+# %%
+jobs[0].text
+# %%
+job_title = job.find('span', id='jobTitle-e8f1e8f5742797f5')
+if job_title:
+    print(job_title.text)
+else:
+    print("Erorr text not found")
+
+# %%
