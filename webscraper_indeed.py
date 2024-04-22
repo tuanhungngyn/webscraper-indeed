@@ -12,15 +12,24 @@ html_soup = BeautifulSoup(html_source_code, "html.parser")
 
 jobs = html_soup.find_all(class_= "css-5lfssm")
 # %%
-jobs[0]
+jobs[0].text
+# %%
+jobs[1].text
 # %%
 for job in jobs:
+    title = job.text
+    # location = job.find("div", class_="css-92r8pb")
+    # company = job.find("span", class_="css-1p0sjhy")
+    print(title.strip(), "\n")
+    # print(location)
+    # print(company)
+    # print("\n")
+    # company = job.find("span", class_="css-1p0sjhy")
 
-    title = job.find("span", class_= "title")
-    print(title)
+
 # %%
-location = jobs.find("div", class_="css-92r8pb")
-company = jobs.find("span", class_="css-1p0sjhy")
+
+
 #titles = browser.find_elements(By.CLASS_NAME, "title")
 #company_element = browser.find_element(By.XPATH, "")
 #location_element = browser.find_element(By.XPATH, "")
