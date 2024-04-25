@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import csv
 import time
 
@@ -36,11 +38,12 @@ with open("job_listing.csv", "w", newline="") as file:
             writer.writerow(data)
         try:
             next_button = WebDriverWait(browser, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//*[@id='jobsearch-JapanPage']/div/div[5]/div/div[1]/nav/ul/li[7]/a"))
+                EC.element_to_be_clickable ((By.XPATH, "//a[contains(@aria-label, 'Next Page')]"))
             )
             next_button.click()
         except Exception as e:
             print("Failed to click on the next button or end of pages:", str(e))
+            raise
             break
 
 
