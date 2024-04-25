@@ -23,31 +23,25 @@ with open("job_listing.csv", "w", newline="") as file:
         time.sleep(5)
         for job in jobs:
             title_tag = job.find(lambda tag: tag.has_attr("title"))
-            if title_tag:
-                print(title_tag.text)
-            else:
-                continue
             company = job.find("span", class_="css-92r8pb")
-            if company:
-                print(company.text)
-            else:
-                continue
             location = job.find("div", "css-1p0sjhy")
-            if location:
+            if title_tag and company and location:
+                print(title_tag.text)
+                print(company.text)
                 print(location.text)
+                print("\n")
             else:
                 continue
-            print("\n")
             data = [title_tag.text, company.text, location.text]
             writer.writerow(data)
         try:
-            next_button = browser.find_element(By.XPATH, "/html/body/main/div/div[2]/div/div[5]/div/div[1]/nav/ul/li[5]/a")
-            if next_button:
-                next_button.click()
+            next_button = WebDriverWait(browser, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//*[@id='jobsearch-JapanPage']/div/div[5]/div/div[1]/nav/ul/li[7]/a"))
+            )
+            next_button.click()
         except Exception as e:
-            print("Failed to click on the next button or end of pages", str(e))
+            print("Failed to click on the next button or end of pages:", str(e))
             break
-
 
 
 browser.quit()
