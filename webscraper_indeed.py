@@ -7,13 +7,19 @@ from bs4 import BeautifulSoup
 import csv
 import time
 
+job_title = input("What Job are you looking for? :")
+location = input("Where do you want to work? :")
+# Replace the the input with + so URL is properly working
+job_title = job_title.replace(" ", "+")
+location = location.replace(" ", "+")
+url = f"https://de.indeed.com/jobs?q={job_title}&l={location}"
 
 browser = webdriver.Chrome()
-browser.get("https://de.indeed.com/jobs?q=werkstudent+Informatik&l=Hamburg")
+browser.get(url)
 
 with open("job_listing.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Title", "Company", "Location"])
+    writer.writerow(["Title", "Company", "Location", "Job Information"])
     
     page_number = 0  
 
@@ -49,8 +55,10 @@ with open("job_listing.csv", "w", newline="") as file:
             title_tag = job.find(lambda tag: tag.has_attr("title"))
             company = job.find("span", class_="css-92r8pb")
             location = job.find("div", class_="css-1p0sjhy")
-            if title_tag and company and location:
-                data = [title_tag.text.strip(), company.text.strip(), location.text.strip()]
+            job_link_tag = job.find("a", class_="jcs-JobTitle css-jspxzf eu4oa1w0")
+            if title_tag and company and location and job_link_tag:
+                job_url = job_link_tag["href"]
+                data = [title_tag.text.strip(), company.text.strip(), location.text.strip(), job_url]
                 writer.writerow(data)
                 print(data)
 
