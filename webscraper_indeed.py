@@ -57,8 +57,9 @@ with open("job_listing.csv", "w", newline="") as file:
             location = job.find("div", class_="css-1p0sjhy")
             job_link_tag = job.find("a", class_="jcs-JobTitle css-jspxzf eu4oa1w0")
             if title_tag and company and location and job_link_tag:
-                job_url = job_link_tag["href"]
-                data = [title_tag.text.strip(), company.text.strip(), location.text.strip(), job_url]
+                relative_job_url = job_link_tag["href"]
+                full_job_url = "de.indeed.com" + relative_job_url
+                data = [title_tag.text.strip(), company.text.strip(), location.text.strip(), full_job_url]
                 writer.writerow(data)
                 print(data)
 
