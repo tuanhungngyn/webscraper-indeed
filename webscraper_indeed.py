@@ -5,7 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import csv
+import os
 import time
+import pandas as pd
 
 job_title = input("What Job are you looking for? :")
 location = input("Where do you want to work? :")
@@ -16,30 +18,35 @@ url = f"https://de.indeed.com/jobs?q={job_title}&l={location}"
 
 browser = webdriver.Chrome()
 browser.get(url)
+input_file = f"{job_title}_{location}.csv"
 
-with open("job_listing.csv", "w", newline="") as file:
+file_exists = os.path.exists(input_file)
+ 
+
+with open(input_file, "a" if file_exists else "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Title", "Company", "Location", "Job Information"])
-    
+    id_number = 0
     page_number = 0  
+    if not file_exists:
+        writer.writerow(["ID", "Title", "Company", "Location", "Job Information"])
 
-    while True:
-        time.sleep(5)  
+while True:
+        time.sleep(5)  #wait for the page to load every element
 
         if page_number == 0:
             try:
                 cookies_button = WebDriverWait(browser, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#onetrust-reject-all-handler"))  # Update your actual selector here
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#onetrust-reject-all-handler")) 
                 )
                 cookies_button.click()
                 print("Cookies declined on the first page.")
-            except Exception as e:
+            except Exception as e:  
                 print("Cookies button not found on the first page:", str(e))
         else:
             try:
                 
                 overlay_close_button = WebDriverWait(browser, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#mosaic-desktopserpjapopup > div.css-g6agtu.eu4oa1w0 > button > svg"))  # Update your actual selector here
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#mosaic-desktopserpjapopup > div.css-g6agtu.eu4oa1w0 > button > svg"))
                 )
                 overlay_close_button.click()
                 print(f"Overlay closed on page {page_number + 1}.")
@@ -59,7 +66,8 @@ with open("job_listing.csv", "w", newline="") as file:
             if title_tag and company and location and job_link_tag:
                 relative_job_url = job_link_tag["href"]
                 full_job_url = "de.indeed.com" + relative_job_url
-                data = [title_tag.text.strip(), company.text.strip(), location.text.strip(), full_job_url]
+                id_number += 1
+                data = [id_number ,title_tag.text.strip(), company.text.strip(), location.text.strip(), full_job_url]
                 writer.writerow(data)
                 print(data)
 
@@ -76,5 +84,10 @@ with open("job_listing.csv", "w", newline="") as file:
             break
 
 browser.quit()
+df = pd.read_csv("job_listing.csv")
+print(df)
+2# %%
+# maybe allign the ids again after finding duplicates
+
 
 # %%
