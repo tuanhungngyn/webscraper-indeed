@@ -30,7 +30,7 @@ with open(input_file, "a" if file_exists else "w", newline="") as file:
     if not file_exists:
         writer.writerow(["ID", "Title", "Company", "Location", "Job Information"])
 
-while True:
+    while True:
         time.sleep(5)  #wait for the page to load every element
 
         if page_number == 0:
@@ -84,10 +84,3 @@ while True:
             break
 
 browser.quit()
-df = pd.read_csv("job_listing.csv")
-print(df)
-2# %%
-# maybe allign the ids again after finding duplicates
-
-
-# %%
