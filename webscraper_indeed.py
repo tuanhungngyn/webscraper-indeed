@@ -21,16 +21,19 @@ browser.get(url)
 input_file = f"{job_title}_{location}.csv"
 
 file_exists = os.path.exists(input_file)
- 
+if file_exists:
+    df = pd.read_csv(input_file)
+else:
+    df = pd.DataFrame(columns=["ID", "Title", "Company", "Location", "Job Information"])
 
-with open(input_file, "a" if file_exists else "w", newline="") as file:
-    writer = csv.writer(file)
-    id_number = 0
-    page_number = 0  
-    if not file_exists:
-        writer.writerow(["ID", "Title", "Company", "Location", "Job Information"])
-
-    while True:
+# with open(input_file, "a" if file_exists else "w", newline="") as file:
+#     writer = csv.writer(file)
+#     id_number = 0
+#     page_number = 0  
+#     if not file_exists:
+#         writer.writerow(["ID", "Title", "Company", "Location", "Job Information"])
+page_number = 0
+while True:
         time.sleep(5)  #wait for the page to load every element
 
         if page_number == 0:
@@ -57,7 +60,7 @@ with open(input_file, "a" if file_exists else "w", newline="") as file:
         html_soup = BeautifulSoup(html_source_code, "html.parser")
         jobs = html_soup.find_all(class_="css-5lfssm")
 
-        
+        #scrape out elements        
         for job in jobs:
             title_tag = job.find(lambda tag: tag.has_attr("title"))
             company = job.find("span", class_="css-92r8pb")
@@ -66,10 +69,10 @@ with open(input_file, "a" if file_exists else "w", newline="") as file:
             if title_tag and company and location and job_link_tag:
                 relative_job_url = job_link_tag["href"]
                 full_job_url = "de.indeed.com" + relative_job_url
-                id_number += 1
-                data = [id_number ,title_tag.text.strip(), company.text.strip(), location.text.strip(), full_job_url]
-                writer.writerow(data)
-                print(data)
+                # id_number += 1
+                data = [title_tag.text.strip(), company.text.strip(), location.text.strip(), full_job_url]
+                # writer.writerow(data)
+                
 
         # Turning to next page
         try:
