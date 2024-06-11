@@ -14,19 +14,20 @@ def parse_html_joblist(browser, id_number):
     for job in jobs:
 
         #debugging cases
-        print("HTML: ", job.prettify())
+        #print("HTML: ", job.prettify())
         title_tag = job.find(lambda tag: tag.has_attr("title"))
-        company = job.find("span", class_="css-92r8pb")
-        location = job.find("div", class_="css-1p0sjhy")
+        company = job.find("span", class_="css-63koeb")
+        location = job.find("div", class_="css-1p0sjhy eu4oa1w0")
         job_link_tag = job.find("a", class_="jcs-JobTitle css-jspxzf eu4oa1w0")
 
         #for debugging cases
-        #print("Title: ", title_tag)
-        #print("Company: ", company)
-        #print("Location: ", location)
-        #print("Job Information: ", job_link_tag)
+        # print("Title: ", title_tag)
+        # print("Company: ", company)
+        # print("Location: ", location)
+        # print("Job Information: ", job_link_tag)
         
         if title_tag and company and location and job_link_tag:
+            print("All elements found for the job, appending to the file.")
             relative_job_url = job_link_tag["href"]
             full_job_url = "de.indeed.com" + relative_job_url
             id_number += 1
@@ -38,5 +39,7 @@ def parse_html_joblist(browser, id_number):
             }
             new_data.append(data)
             print("New jobs: ", data)
+        else:
+            print("One or more element is missing.")
             
     return new_data, id_number

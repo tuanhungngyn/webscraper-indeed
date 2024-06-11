@@ -17,16 +17,16 @@ def decline_cookies(browser, page_number):
             print("Cookies declined on the first page.")
         except Exception as e:  
                 print("Cookies button not found on the first page:", str(e))
-        else:
-            try:
+    else:
+        try:
                 
-                overlay_close_button = WebDriverWait(browser, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "#mosaic-desktopserpjapopup > div.css-g6agtu.eu4oa1w0 > button > svg"))
-                )
-                overlay_close_button.click()
-                print(f"Overlay closed on page {page_number + 1}.")
-            except Exception as e:
-                print(f"Overlay button not found on page {page_number + 1}:", str(e))
+            overlay_close_button = WebDriverWait(browser, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "#mosaic-desktopserpjapopup > div.css-g6agtu.eu4oa1w0 > button > svg"))
+            )
+            overlay_close_button.click()
+            print(f"Overlay closed on page {page_number + 1}.")
+        except Exception as e:
+            print(f"Overlay button not found on page {page_number + 1}:", str(e))
 
 
 
