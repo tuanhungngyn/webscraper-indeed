@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 def parse_html_joblist(browser, id_number):

@@ -35,21 +35,19 @@ def save_to_csv(data, input_file):
     file_exists = os.path.exists(input_file)
     if file_exists:
         print(f"File {input_file} exists. Reading the existing input file.")
-        df = pd.read_csv(input_file)
+        df_existing = pd.read_csv(input_file)
     else:
         print(f"File {input_file} does not exist. Creating a new file.")
-        df = pd.DataFrame(columns=["ID", "Title", "Company", "Location", "Job Information"])
+        df_existing = pd.DataFrame(columns=["ID", "Title", "Company", "Location", "Job Information"])
         
-    new_df = pd.DataFrame(data)
-    print(f"New data frame: \n{new_df}")
+    df_new = pd.DataFrame(data)
+    print(f"New data frame: \n{df_new}")
 
-    df = pd.concat([df, new_df], ignore_index=True)
-    print(f"Concatenated Dataframe: \n{df}")
+    df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+    
+    df_combined.drop_duplicates(subset=["Title", "Company"], keep='first', inplace=True)
 
-    df.to_csv(input_file, index=False)
-    print(f"Data saved to {input_file}")
-
-
+    df_combined.to_csv(input_file, index=False)
 
 
 def id_number_declaration(input_file):
